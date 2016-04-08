@@ -66,7 +66,7 @@ function zaw-register-src() {
 
     # define shortcut function
     widget_name="zaw-${(L)name// /-}"
-    eval "function ${widget_name} { zle zaw ${func} }"
+    eval "function ${widget_name} { zle zaw ${func} \$@ }"
     eval "zle -N ${widget_name}"
 }
 
@@ -210,7 +210,9 @@ function zaw-callback-edit-file() {
 setopt local_options extended_glob
 local src_dir="${cur_dir}/sources" f
 if [[ -d "${src_dir}" ]]; then
-    for f ("${src_dir}"/^*.zwc) source "${f}"
+    for f in "${src_dir}"/^*.zwc; do
+        source "${f}"
+    done
 fi
 
 # dummy function
