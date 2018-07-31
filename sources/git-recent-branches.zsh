@@ -60,7 +60,7 @@ function zaw-src-git-recent-all-branches () {
         zaw-src-git-branches-merge-no-ff \
         zaw-src-git-branches-diff \
         zaw-src-git-branches-diff-stat \
-        zaw-src-git-branches-diff-tool \
+        zaw-src-git-branches-difftool \
         zaw-src-git-branches-reset \
         zaw-src-git-branches-rebase \
         zaw-src-git-branches-rebase-interactive \
@@ -109,7 +109,7 @@ function zaw-src-git-branches-diff() {
     zle accept-line
 }
 
-function zaw-src-git-branches-diff-tool() {
+function zaw-src-git-branches-difftool() {
     local b_name=${1#(heads|remotes|tags)/}
     BUFFER="git difftool $b_name"
     zle accept-line
