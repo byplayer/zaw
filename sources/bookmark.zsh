@@ -9,7 +9,7 @@
 zmodload zsh/system
 autoload -U fill-vars-or-accept
 
-BOOKMARKFILE="${BOOKMARKFILE:-"${HOME}/.zaw-bookmarks"}"
+typeset -g BOOKMARKFILE="${BOOKMARKFILE:-"${HOME}/.zaw-bookmarks"}"
 
 function zaw-src-bookmark() {
     if [[ -f "${BOOKMARKFILE}" ]]; then
@@ -17,7 +17,7 @@ function zaw-src-bookmark() {
     fi
     actions=("zaw-bookmark-execute" "zaw-callback-replace-buffer" "zaw-callback-append-to-buffer" "zaw-bookmark-remove")
     act_descriptions=("execute" "replace edit buffer" "append to edit buffer" "removed bookmark")
-    options=("-m")
+    src_opts=("-m")
 }
 
 zaw-register-src -n bookmark zaw-src-bookmark

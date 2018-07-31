@@ -16,7 +16,7 @@ function zaw-src-git-files-raw() {
 
     actions=(zaw-callback-edit-file zaw-src-git-status-add zaw-src-git-status-add-p zaw-src-git-status-reset zaw-src-git-status-checkout zaw-src-git-status-rm zaw-callback-append-to-buffer)
     act_descriptions=("edit file" "add" "add -p" "reset" "checkout" "rm" "append to edit buffer")
-    options=(-m -n)
+    src_opts=(-m -n)
     return 0
 }
 
@@ -24,7 +24,7 @@ function zaw-src-git-files-classify-aux() {
     local -a as ms ds os
     : ${(A)as::=${(0)"$(git ls-files $(git rev-parse --show-cdup) -z)"}}
     : ${(A)ms::=${(0)"$(git ls-files $(git rev-parse --show-cdup) -z -m)"}}
-    if (( $#ms == 0 )) || (( $#ms == 1 )) &&  [[ -z "$ms" ]]; then
+    if (( ${#ms} == 0 )) || (( ${#ms} == 1 )) &&  [[ -z "$ms" ]]; then
         candidates=($as)
         for candidate in ${candidates}
         do

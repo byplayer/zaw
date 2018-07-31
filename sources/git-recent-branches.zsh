@@ -40,7 +40,7 @@ function zaw-src-git-recent-branches () {
         "reset hard" \
         "delete" \
         "delete force")
-    options=()
+    src_opts=()
 }
 
 function zaw-src-git-recent-all-branches () {
@@ -60,6 +60,7 @@ function zaw-src-git-recent-all-branches () {
         zaw-src-git-branches-merge-no-ff \
         zaw-src-git-branches-diff \
         zaw-src-git-branches-diff-stat \
+        zaw-src-git-branches-diff-tool \
         zaw-src-git-branches-reset \
         zaw-src-git-branches-rebase \
         zaw-src-git-branches-rebase-interactive \
@@ -76,6 +77,7 @@ function zaw-src-git-recent-all-branches () {
         "merge no ff" \
         "diff" \
         "diff stat" \
+        "difftool"
         "reset" \
         "rebase" \
         "rebase interactive from..." \
@@ -83,7 +85,7 @@ function zaw-src-git-recent-all-branches () {
         "reset hard" \
         "delete" \
         "delete force")
-    options=()
+    src_opts=()
 }
 
 function zaw-src-git-recent-branches-checkout () {
@@ -104,6 +106,12 @@ function zaw-src-git-recent-branches-checkout () {
 function zaw-src-git-branches-diff() {
     local b_name=${1#(heads|remotes|tags)/}
     BUFFER="git diff $b_name"
+    zle accept-line
+}
+
+function zaw-src-git-branches-diff-tool() {
+    local b_name=${1#(heads|remotes|tags)/}
+    BUFFER="git difftool $b_name"
     zle accept-line
 }
 
