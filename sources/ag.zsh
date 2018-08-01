@@ -60,7 +60,7 @@ function zaw-src-ag() {
 
         actions=("zaw-src-ag-open-file" "zaw-callback-append-to-buffer")
         act_descriptions=("edit file" "append to edit buffer")
-        options=("-m")
+        src_opts=("-m")
     else
         return 1
     fi
