@@ -36,7 +36,7 @@ function zaw-src-ag-open-file() {
     local filename=${1%%:*}
     local line=${${1#*:}%%:*}
     if [[ -z $ZAW_EDITOR_JUMP_PARAM ]]; then
-        ZAW_EDITOR_JUMP_PARAM="+%LINE% %FILE%"
+        ZAW_EDITOR_JUMP_PARAM="${${ZAW_EDITOR_JUMP_PARAM/\%LINE\%/$line}/\%FILE\%/$filename}"
     fi
     BUFFER="${ZAW_EDITOR} ${${ZAW_EDITOR_JUMP_PARAM/\%LINE\%/$line}/\%FILE\%/$filename}"
     zle accept-line
