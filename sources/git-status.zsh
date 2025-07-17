@@ -17,6 +17,7 @@ function zaw-src-git-status() {
     fi
 
     actions=( \
+
       zaw-src-git-status-add \
       zaw-src-git-status-add-p \
       zaw-src-git-status-reset \
@@ -32,6 +33,42 @@ function zaw-src-git-status() {
       "rm")
     src_opts=()
 }
+
+function zaw-src-git-status-edit-src() {
+  git rev-parse --git-dir >/dev/null 2>&1
+    if [[ $? == 0 ]]; then
+      local file_list="$(git status --porcelain)"
+      : ${(A)candidates::=${(f)${file_list}}}
+
+      : ${(A)cand_descriptions::=${${(f)${file_list}}/ M /[modified]        }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/AM /[add|modified]    }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/MM /[staged|modified] }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/M  /[staged]          }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/A  /[staged(add)]     }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/ D /[deleted]         }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/UU /[conflict]        }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/AA /[conflict]        }}
+      : ${(A)cand_descriptions::=${${(M)cand_descriptions}/\?\? /[untracked]       }}
+
+    fi
+
+    actions=( \
+      zaw-src-git-status-edit \
+      zaw-src-git-status-add \
+      zaw-src-git-status-add-p \
+      zaw-src-git-status-reset \
+      zaw-src-git-status-checkout \
+      zaw-src-git-status-rm)
+    act_descriptions=( \
+      "edit" \
+      "add" \
+      "add -p" \
+      "reset" \
+      "checkout" \
+      "rm")
+    src_opts=()
+}
+
 
 function zaw-src-git-status-add() {
   local f_path=${1##?* }
@@ -82,3 +119,4 @@ function zaw-src-git-status-rm() {
 }
 
 zaw-register-src -n git-status zaw-src-git-status
+zaw-register-src -n git-status-edit zaw-src-git-status-edit-src
