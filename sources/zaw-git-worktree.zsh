@@ -64,13 +64,13 @@ function zaw-src-git-worktree() {
 
     actions=( \
         zaw-src-git-worktree-select \
-        zaw-src-git-worktree-delete \
         zaw-src-git-worktree-delete-branch \
+        zaw-src-git-worktree-delete \
         zaw-callback-append-to-buffer)
     act_descriptions=( \
         "select worktree" \
-        "delete worktree" \
         "delete branch and worktree" \
+        "delete worktree" \
         "append to edit buffer")
     src_opts=()
 }
