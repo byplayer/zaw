@@ -23,15 +23,16 @@ function zaw-src-git-worktree() {
                         ;;
                     "")
                         if [[ -n "$current_path" ]]; then
+                            local dir_name="${current_path:t}"  # Get last directory name
                             worktrees+=("$current_path")
                             paths+=("$current_path")
                             commits+=("$current_commit")
                             if [[ -n "$current_branch" ]]; then
                                 branches+=("$current_branch")
-                                descriptions+=("$current_path [$current_branch] ${current_commit:0:8}")
+                                descriptions+=("$dir_name [$current_branch] ${current_commit:0:8}")
                             else
                                 branches+=("(detached)")
-                                descriptions+=("$current_path [(detached)] ${current_commit:0:8}")
+                                descriptions+=("$dir_name [(detached)] ${current_commit:0:8}")
                             fi
                         fi
                         current_path=""
@@ -43,15 +44,16 @@ function zaw-src-git-worktree() {
 
             # Add the last worktree if the output doesn't end with empty line
             if [[ -n "$current_path" ]]; then
+                local dir_name="${current_path:t}"  # Get last directory name
                 worktrees+=("$current_path")
                 paths+=("$current_path")
                 commits+=("$current_commit")
                 if [[ -n "$current_branch" ]]; then
                     branches+=("$current_branch")
-                    descriptions+=("$current_path [$current_branch] ${current_commit:0:8}")
+                    descriptions+=("$dir_name [$current_branch] ${current_commit:0:8}")
                 else
                     branches+=("(detached)")
-                    descriptions+=("$current_path [(detached)] ${current_commit:0:8}")
+                    descriptions+=("$dir_name [(detached)] ${current_commit:0:8}")
                 fi
             fi
 
