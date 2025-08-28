@@ -53,6 +53,7 @@ function zaw-src-git-recent-all-branches () {
 
     actions=( \
         zaw-src-git-branches-checkout \
+        zaw-src-git-branches-worktree-add \
         zaw-src-git-branches-simple-checkout \
         zaw-callback-append-to-buffer \
         zaw-src-git-branches-merge \
@@ -70,6 +71,7 @@ function zaw-src-git-recent-all-branches () {
         zaw-src-git-branches-delete-force)
     act_descriptions=(
         "check out locally" \
+        "create worktree" \
         "check out" \
         "append to edit buffer" \
         "merge" \
@@ -77,7 +79,7 @@ function zaw-src-git-recent-all-branches () {
         "merge no ff" \
         "diff" \
         "diff stat" \
-        "difftool"
+        "difftool" \
         "reset" \
         "rebase" \
         "rebase interactive from..." \
@@ -119,6 +121,29 @@ function zaw-src-git-branches-diff-stat() {
   local b_name=${1#(heads|remotes|tags)/}
     BUFFER="git diff --stat $b_name"
     zle accept-line
+}
+
+function zaw-src-git-branches-worktree-add() {
+    local b_type=${1%%/*}
+    local b_name=${1#(heads|remotes|tags)/}
+    case "$b_type" in
+        "heads")
+            LBUFFER="git wtadd "
+            RBUFFER=" $b_name"
+            zle accept-line
+            ;;
+        "remotes")
+            local remote_name=${b_name%%/*}
+            local branch_name=${b_name#*/}
+            BUFFER="git wtadd $branch_name $remote_name/$branch_name"
+            zle accept-line
+            ;;
+        "tags")
+            LBUFFER="git wtadd "
+            RBUFFER=" $b_name"
+            zle accept-line
+            ;;
+    esac
 }
 
 zaw-register-src -n git-recent-branches zaw-src-git-recent-branches
