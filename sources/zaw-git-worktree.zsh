@@ -97,7 +97,7 @@ function zaw-src-git-worktree-delete() {
     fi
 
     if [[ -d "$worktree_path" ]]; then
-        BUFFER="git worktree remove '$worktree_path'"
+        BUFFER="git worktree remove -f '$worktree_path'"
         zle accept-line
     else
         echo "Worktree path not found: $worktree_path"
@@ -121,10 +121,10 @@ function zaw-src-git-worktree-delete-branch() {
 
         if [[ -n "$branch_name" ]]; then
             # Remove worktree and delete the local branch
-            BUFFER="git worktree remove '$worktree_path' && git branch -d '$branch_name'"
+            BUFFER="git worktree remove -f '$worktree_path' && git branch -d '$branch_name'"
         else
             # Just remove worktree (detached HEAD case)
-            BUFFER="git worktree remove '$worktree_path'"
+            BUFFER="git worktree remove -f '$worktree_path'"
         fi
         zle accept-line
     else
