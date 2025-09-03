@@ -87,7 +87,7 @@ function zaw-src-git-worktree-select() {
 
 function _zaw-validate-worktree() {
     local worktree_path="$1"
-    
+
     local current_worktree="$(git rev-parse --show-toplevel 2>/dev/null)"
 
     if [[ "$worktree_path" == "$current_worktree" ]]; then
@@ -102,6 +102,11 @@ function _zaw-validate-worktree() {
 
     if ! git -C "$worktree_path" diff --quiet HEAD 2>/dev/null || ! git -C "$worktree_path" diff --quiet --cached 2>/dev/null; then
         echo "Error: Uncommitted changes found in worktree: $worktree_path"
+        return 1
+    fi
+
+    if [[ -n "$(git -C "$worktree_path" ls-files --others --exclude-standard 2>/dev/null)" ]]; then
+        echo "Error: Untracked files found in worktree: $worktree_path"
         return 1
     fi
 
