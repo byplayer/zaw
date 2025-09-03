@@ -116,6 +116,12 @@ function zaw-src-git-worktree-delete-branch() {
     fi
 
     if [[ -d "$worktree_path" ]]; then
+        # Check for uncommitted files in the worktree
+        if ! git -C "$worktree_path" diff --quiet HEAD 2>/dev/null || ! git -C "$worktree_path" diff --quiet --cached 2>/dev/null; then
+            echo "Error: Uncommitted changes found in worktree: $worktree_path"
+            return 1
+        fi
+
         # Get the branch name for this worktree
         local branch_name="$(git -C "$worktree_path" branch --show-current 2>/dev/null)"
 
