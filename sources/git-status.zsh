@@ -21,14 +21,14 @@ function zaw-src-git-status() {
       zaw-src-git-status-add \
       zaw-src-git-status-add-p \
       zaw-src-git-status-reset \
-      zaw-src-git-status-checkout \
+      zaw-src-git-status-restore \
       zaw-src-git-status-edit \
       zaw-src-git-status-rm)
     act_descriptions=( \
       "add" \
       "add -p" \
       "reset" \
-      "checkout" \
+      "restore" \
       "edit" \
       "rm")
     src_opts=()
@@ -58,7 +58,7 @@ function zaw-src-git-status-edit-src() {
       zaw-src-git-status-add-p \
       zaw-src-git-status-reset \
       zaw-src-git-status-diff \
-      zaw-src-git-status-checkout \
+      zaw-src-git-status-restore \
       zaw-src-git-status-rm)
     act_descriptions=( \
       "edit" \
@@ -66,7 +66,7 @@ function zaw-src-git-status-edit-src() {
       "add -p" \
       "reset" \
       "diff" \
-      "checkout" \
+      "restore" \
       "rm")
     src_opts=()
 }
@@ -93,10 +93,10 @@ function zaw-src-git-status-reset() {
   zle accept-line
 }
 
-function zaw-src-git-status-checkout() {
+function zaw-src-git-status-restore() {
   local f_path=${1##?* }
   local git_base="$(git rev-parse --show-cdup)"
-  BUFFER="git checkout '$git_base$f_path'"
+  BUFFER="git restore '$git_base$f_path'"
   zle accept-line
 }
 
