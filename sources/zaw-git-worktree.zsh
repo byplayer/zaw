@@ -85,10 +85,9 @@ function zaw-src-git-worktree-select() {
     fi
 }
 
-function zaw-src-git-worktree-delete() {
+function _zaw-validate-worktree() {
     local worktree_path="$1"
-
-    # Get the current worktree path to prevent deletion
+    
     local current_worktree="$(git rev-parse --show-toplevel 2>/dev/null)"
 
     if [[ "$worktree_path" == "$current_worktree" ]]; then
@@ -96,45 +95,40 @@ function zaw-src-git-worktree-delete() {
         return 1
     fi
 
-    if [[ -d "$worktree_path" ]]; then
+    if [[ ! -d "$worktree_path" ]]; then
+        echo "Worktree path not found: $worktree_path"
+        return 1
+    fi
+
+    if ! git -C "$worktree_path" diff --quiet HEAD 2>/dev/null || ! git -C "$worktree_path" diff --quiet --cached 2>/dev/null; then
+        echo "Error: Uncommitted changes found in worktree: $worktree_path"
+        return 1
+    fi
+
+    return 0
+}
+
+function zaw-src-git-worktree-delete() {
+    local worktree_path="$1"
+
+    if _zaw-validate-worktree "$worktree_path"; then
         BUFFER="git worktree remove -f '$worktree_path'"
         zle accept-line
-    else
-        echo "Worktree path not found: $worktree_path"
     fi
 }
 
 function zaw-src-git-worktree-delete-branch() {
     local worktree_path="$1"
 
-    # Get the current worktree path to prevent deletion
-    local current_worktree="$(git rev-parse --show-toplevel 2>/dev/null)"
-
-    if [[ "$worktree_path" == "$current_worktree" ]]; then
-        echo "Cannot delete current worktree: $worktree_path"
-        return 1
-    fi
-
-    if [[ -d "$worktree_path" ]]; then
-        # Check for uncommitted files in the worktree
-        if ! git -C "$worktree_path" diff --quiet HEAD 2>/dev/null || ! git -C "$worktree_path" diff --quiet --cached 2>/dev/null; then
-            echo "Error: Uncommitted changes found in worktree: $worktree_path"
-            return 1
-        fi
-
-        # Get the branch name for this worktree
+    if _zaw-validate-worktree "$worktree_path"; then
         local branch_name="$(git -C "$worktree_path" branch --show-current 2>/dev/null)"
 
         if [[ -n "$branch_name" ]]; then
-            # Remove worktree and delete the local branch
             BUFFER="git worktree remove -f '$worktree_path' && git branch -d '$branch_name'"
         else
-            # Just remove worktree (detached HEAD case)
             BUFFER="git worktree remove -f '$worktree_path'"
         fi
         zle accept-line
-    else
-        echo "Worktree path not found: $worktree_path"
     fi
 }
 
