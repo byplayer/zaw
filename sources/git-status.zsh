@@ -59,6 +59,7 @@ function zaw-src-git-status-edit-src() {
       zaw-src-git-status-reset \
       zaw-src-git-status-diff \
       zaw-src-git-status-restore \
+      zaw-src-git-status-append-to-buffer \
       zaw-src-git-status-rm)
     act_descriptions=( \
       "edit" \
@@ -67,6 +68,7 @@ function zaw-src-git-status-edit-src() {
       "reset" \
       "diff" \
       "restore" \
+      "append to edit buffer" \
       "rm")
     src_opts=()
 }
@@ -98,6 +100,11 @@ function zaw-src-git-status-restore() {
   local git_base="$(git rev-parse --show-cdup)"
   BUFFER="git restore '$git_base$f_path'"
   zle accept-line
+}
+
+function zaw-src-git-status-append-to-buffer() {
+  local f_path=${1##?* }
+  LBUFFER="${BUFFER} '$git_base$f_path'"
 }
 
 function zaw-src-git-status-edit() {
